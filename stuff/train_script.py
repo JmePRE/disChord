@@ -24,7 +24,7 @@ INIT_LR = 1e-3
 BS = 20
 print('Build model...')
 model = Sequential()
-model.add(Dense(12, activation='sigmoid',input_shape=(12,)))
+model.add(Dense(units=12, activation='sigmoid', input_shape=(12,)))
 model.add(Dense(48, activation='relu'))
 model.add(Dropout(0.1))
 model.add(Dense(15, activation='sigmoid'))
@@ -59,3 +59,4 @@ plt.title("Training Loss and Accuracy")
 plt.xlabel("Epoch #")
 plt.ylabel("Loss/Accuracy")
 plt.legend(loc="upper left")
+plt.show()
