@@ -54,7 +54,7 @@ def label_process(label_csv, sound_file):
               "Eb": 6, "E": 7, "F": 8, "F#": 9, "Gb": 9, "G": 10, "G#": 11, "Ab": 11, "NC":12}
     # mmdict = {"M": 0, "m": 1, "NC": 2}
     mlb.fit(labels)
-    # print(mlb.classes_)
+    print(mlb.classes_)
     with open(label_csv, newline='') as csvfile:
         r = csv.reader(csvfile)
 
@@ -64,7 +64,6 @@ def label_process(label_csv, sound_file):
                 # y_train_key[ri][chdict.get(row[0])] = 1
                 # y_train_min_maj[ri][mmdict.get(row[1])] = 1
                 # print(row[:2])
-                print(row[0])
                 row[0] = labels[0][chdict.get(row[0])]
                 y_train[ri] = mlb.transform([tuple(row[:2])])
                 ri += 1
