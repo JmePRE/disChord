@@ -21,9 +21,12 @@ def chroma_process(y, sr):
                                                            metric='cosine'))
     chroma_smooth = scipy.ndimage.median_filter(chroma_filter, size=(1, 9))
     # beat_frames = np.pad(beat_frames, 1, 'constant', constant_values=0)
-    print(beat_frames)
-    print(len(chroma[0]))
-    beat_frames = np.append(beat_frames, (beat_frames[-1]+int(np.mean([(beat_frames[i] - beat_frames[i - 1]) for i in range(1, len(beat_frames))]))))
+    while(beat_frames[-1]<(len(y)//HOP_LENGTH)):
+        beat_frames = np.append(beat_frames, (beat_frames[-1]+int(np.mean([(beat_frames[i] - beat_frames[i - 1]) for i in range(1, len(beat_frames))]))))
+    np.set_printoptions(precision=4)
+    np.set_printoptions(suppress=True)
+    print([(beat_frames[i] - beat_frames[i - 1]) for i in range(1, len(beat_frames))])
+    print(librosa.frames_to_time(beat_frames, sr))
     print(tempo)
 
     beat_chroma = librosa.util.sync(chroma_smooth, beat_frames, aggregate=np.median)
@@ -34,7 +37,7 @@ def chroma_process(y, sr):
 
     # bc = np.split(np.transpose(chroma_smooth), beat_frames)
     # print(len(chroma_each_beat))
-    return chroma_each_beat
+    return chroma_each_beat, librosa.frames_to_time(beat_frames, sr)
 
 
 # bc = chroma_process(y0, sr0)
@@ -43,7 +46,7 @@ def chroma_process(y, sr):
 def label_process(label_csv, sound_file):
     # root, number of beats
     y0, sr0 = librosa.load(sound_file)
-    x_train = chroma_process(y0, sr0)
+    x_train, beat_frames = chroma_process(y0, sr0)
     labels = [["A", "A#", "B", "C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "NC", "M", "m"]]
     # y_train_key = np.zeros((len(x_train), 13))
     # y_train_min_maj = np.zeros((len(x_train), 3))
@@ -54,7 +57,7 @@ def label_process(label_csv, sound_file):
               "Eb": 6, "E": 7, "F": 8, "F#": 9, "Gb": 9, "G": 10, "G#": 11, "Ab": 11, "NC":12}
     # mmdict = {"M": 0, "m": 1, "NC": 2}
     mlb.fit(labels)
-    print(mlb.classes_)
+    # print(mlb.classes_)
     with open(label_csv, newline='') as csvfile:
         r = csv.reader(csvfile)
 
@@ -64,15 +67,20 @@ def label_process(label_csv, sound_file):
                 # y_train_key[ri][chdict.get(row[0])] = 1
                 # y_train_min_maj[ri][mmdict.get(row[1])] = 1
                 # print(row[:2])
-                row[0] = labels[0][chdict.get(row[0])]
-                y_train[ri] = mlb.transform([tuple(row[:2])])
-                ri += 1
+                try:
+                    row[0] = labels[0][chdict.get(row[0])]
+                    y_train[ri] = mlb.transform([tuple(row[:2])])
+                    ri += 1
+                except:
+                    print(ri)
+                    ri += 1
+                    pass
     return x_train, y_train
 
 
-x,y = label_process("data/chordtest0.csv", "data/chordtest0.wav")
-print(x[0].shape)
-print(len(y))
+# x,y = label_process("data/chordtest0.csv", "data/chordtest0.wav")
+# print(x[0].shape)
+# print(len(y))
 # print(bc.shape)
 '''
 plt.figure(figsize=(10, 4))

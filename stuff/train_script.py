@@ -7,6 +7,7 @@ import matplotlib.pyplot as plt
 from sklearn.model_selection import train_test_split
 from dsp_preprocess import label_process
 from keras.optimizers import Adam
+import os
 '''
 import argparse
 
@@ -34,8 +35,19 @@ model.compile(loss='binary_crossentropy',
               optimizer='adam',
               metrics=['accuracy'])
 
-xt, yt = label_process("data/chordtest0.csv", "data/chordtest0.wav")
+xt, yt = np.zeros(12), np.zeros(15)
+for(root, dir, file) in os.walk('data/labels/'):
+    for f in file:
+        x0, y0 = label_process(("data/labels/"+f), ("data/soundfiles/"+f[:-4]+".wav"))
 
+        print(xt.shape)
+        print(yt.shape)
+        print(x0.shape)
+        print(y0.shape)
+        xt = np.vstack([x0, xt])
+        yt = np.vstack([y0, yt])
+print(xt.shape)
+print(yt.shape)
 # train the network
 print("[INFO] training network...")
 H = model.fit(
