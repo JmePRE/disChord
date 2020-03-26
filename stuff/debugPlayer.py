@@ -48,4 +48,4 @@ def play_csv(sf, cf):
     return
 
 
-play_predicts("Soviet_Union_National_Anthem.wav")
+play_predicts("test/Soviet_Union_National_Anthem.wav")

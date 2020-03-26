@@ -29,4 +29,4 @@ def allKeys(soundfile, csvfile):
     return
 
 
-allKeys('data/despacito.wav','data/despacito.csv')
+allKeys('data/losing_my_religion.wav','data/losing_my_religion.csv')
