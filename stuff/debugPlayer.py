@@ -11,6 +11,7 @@ def play_predicts(file):
     y, sr = librosa.load(file)
     labels, beats = classify(y, sr)
     cbeat = 0
+    print(len(beats))
     st = time.time()
     sd.play(y, sr)
     while(time.time()<st+beats[-1]):
@@ -38,6 +39,7 @@ def play_csv(sf, cf):
         beat_frames = np.append(beat_frames, (beat_frames[-1]+int(np.mean([(beat_frames[i] - beat_frames[i - 1]) for i in range(1, len(beat_frames))]))))
     beats = librosa.frames_to_time(beat_frames, sr)
     cbeat = 0
+    print(len(beats))
     st = time.time()
     sd.play(y, sr)
     while (time.time() < st + beats[-1]):
@@ -48,4 +50,5 @@ def play_csv(sf, cf):
     return
 
 
-play_predicts("test/Soviet_Union_National_Anthem.wav")
+play_predicts("data/505.wav")
+# play_csv('data/losing_my_religion.wav','data/losing_my_religion.csv')
