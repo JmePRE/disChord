@@ -18,6 +18,8 @@ def classify(y0, sr0):
     model.add(Dense(units=12, activation='sigmoid', input_shape=(12,)))
     model.add(Dense(48, activation='relu'))
     model.add(Dropout(0.1))
+    model.add(Dense(48, activation='relu'))
+    model.add(Dropout(0.1))
     model.add(Dense(15, activation='sigmoid'))
 
     model.load_weights('model_test.h5')
