@@ -30,4 +30,15 @@ def allKeys(soundfile, csvfile):
 
 
 allKeys('data/505.wav','data/505.csv')
+
+allKeys('data/All_Of_Me.wav','data/All_Of_Me.csv')
+
+allKeys('data/Ave_Verum_Corpus_Mozart.wav','data/Ave_Verum_Corpus_Mozart.csv')
+
+allKeys('data/chordtest0.wav','data/chordtest0.csv')
+
+allKeys('data/despacito.wav','data/despacito.csv')
+
 allKeys('data/greensleeves.wav','data/greensleeves.csv')
+
+allKeys('data/losing_my_religion.wav','data/losing_my_religion.csv')

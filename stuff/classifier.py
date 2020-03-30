@@ -1,34 +1,36 @@
-from keras.models import Sequential
-from keras.layers import Dense
-from keras.layers import LSTM
-from keras.layers import Dropout
 import librosa
 import numpy as np
-import matplotlib.pyplot as plt
-from sklearn.model_selection import train_test_split
 from dsp_preprocess import chroma_process
-from keras.optimizers import Adam
+from dsp_preprocess import chroma_process_split
+from model import model_0
+from model import model_1
+from model import model_2
+from model import model_3
 
 from sklearn.preprocessing import MultiLabelBinarizer
 
-def classify(y0, sr0):
-
+def classify(y0, sr0, mode=0):
     print('Build model...')
-    model = Sequential()
-    model.add(Dense(units=12, activation='sigmoid', input_shape=(12,)))
-    model.add(Dense(48, activation='relu'))
-    model.add(Dropout(0.1))
-    model.add(Dense(15, activation='sigmoid'))
+    if(mode == 0 or mode == 1):
 
-    model.load_weights('model_test.h5')
-
-    # try using different optimizers and different optimizer configs
-    model.compile(loss='binary_crossentropy',
-                  optimizer='adam',
-                  metrics=['accuracy'])
-    x_data, frame_times = chroma_process(y0, sr0)
-
-    preds = model.predict(x_data)
+        x_data, frame_times = chroma_process(y0, sr0)
+        if(mode == 0):
+            model = model_0()
+            model.load_weights('model_test.h5')
+            preds = model.predict(x_data)
+        else:
+            model0 = model_1()
+            model1 = model_2()
+            model0.load_weights('model_1_test.h5')
+            model1.load_weights('model_2_test.h5')
+            preds_0 = model0.predict(x_data)
+            preds_1 = model1.predict(x_data)
+            preds = np.concatenate([preds_0, preds_1], axis=1)
+    elif(mode == 3):
+        x_data, frame_times = chroma_process_split(y0, sr0)
+        model3 = model_3()
+        model3.load_weights('model_test_alt.h5')
+        preds = model3.predict(x_data)
 
     labels = [["A", "A#", "B", "C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "NC", "M", "m"]]
     mlb = MultiLabelBinarizer()
@@ -44,6 +46,4 @@ def classify(y0, sr0):
         pr[pi] = p
         pi += 1
     label_arr = mlb.inverse_transform(pr)
-    # for p in label_arr:
-        # print(p)
     return label_arr, frame_times
