@@ -16,7 +16,10 @@ def play_predicts(file, mode=0):
     sd.play(y, sr)
     while(time.time()<st+beats[-1]):
         if(time.time()>st+beats[cbeat]):
-            print(labels[cbeat])
+            try:
+                print(labels[cbeat])
+            except IndexError:
+                pass
             cbeat += 1
     sd.stop()
     return
@@ -101,7 +104,11 @@ def play_csv(sf, cf):
     return
 
 
-# play_predicts('test/Maroon_5_-_Memories.wav', mode=3)
+# play_predicts('test/Maroon_5_-_Memories.wav', mode=4)
 # play_check("data/losing_my_religion.wav", "data/losing_my_religion.csv", fast=True, mode=3)
 
-play_check('data/All_Of_Me.wav','data/All_Of_Me.csv', fast=True, mode=3)
+# play_check('data/All_Of_Me.wav','data/All_Of_Me.csv', fast=True, mode=3)
+# play_check('data/All_Of_Me.wav','data/All_Of_Me.csv', fast=True, mode=4)
+
+play_check("data/losing_my_religion.wav", "data/losing_my_religion.csv", fast=True, mode=4)
+play_check("data/losing_my_religion.wav", "data/losing_my_religion.csv", fast=True, mode=5)

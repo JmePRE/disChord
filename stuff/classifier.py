@@ -6,6 +6,9 @@ from model import model_0
 from model import model_1
 from model import model_2
 from model import model_3
+from model import model_4
+from model import model_5
+from model import model_6
 
 from sklearn.preprocessing import MultiLabelBinarizer
 
@@ -29,8 +32,22 @@ def classify(y0, sr0, mode=0):
     elif(mode == 3):
         x_data, frame_times = chroma_process_split(y0, sr0)
         model3 = model_3()
-        model3.load_weights('model_test_alt.h5')
+        model3.load_weights('model_3_test.h5')
         preds = model3.predict(x_data)
+    elif (mode == 4):
+        x_data, frame_times = chroma_process_split(y0, sr0)
+        model4 = model_4()
+        model4.load_weights('model_4_test.h5')
+        preds = model4.predict(x_data)
+    elif (mode==5):
+        x_data, frame_times = chroma_process_split(y0, sr0)
+        model0 = model_5()
+        model1 = model_6()
+        model0.load_weights('model_5_test.h5')
+        model1.load_weights('model_6_test.h5')
+        preds_0 = model0.predict(x_data)
+        preds_1 = model1.predict(x_data)
+        preds = np.concatenate([preds_0, preds_1], axis=1)
 
     labels = [["A", "A#", "B", "C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "NC", "M", "m"]]
     mlb = MultiLabelBinarizer()
