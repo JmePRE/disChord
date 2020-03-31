@@ -7,11 +7,18 @@ from classifier import classify
 import csv
 
 
-def play_predicts(file, mode=0):
+def play_predicts(file, mode=0, fast=False):
     y, sr = librosa.load(file)
     labels, beats = classify(y, sr, mode)
     cbeat = 0
     print(len(beats))
+    if(fast):
+        for c in range(len(labels)):
+            try:
+                print("pred: " + str(labels[c]))
+            except IndexError:
+                pass
+        return
     st = time.time()
     sd.play(y, sr)
     while(time.time()<st+beats[-1]):
@@ -104,11 +111,11 @@ def play_csv(sf, cf):
     return
 
 
-# play_predicts('test/Maroon_5_-_Memories.wav', mode=4)
+play_predicts('test/perfect.wav', mode=5, fast=True)
 # play_check("data/losing_my_religion.wav", "data/losing_my_religion.csv", fast=True, mode=3)
 
 # play_check('data/All_Of_Me.wav','data/All_Of_Me.csv', fast=True, mode=3)
 # play_check('data/All_Of_Me.wav','data/All_Of_Me.csv', fast=True, mode=4)
 
-play_check("data/losing_my_religion.wav", "data/losing_my_religion.csv", fast=True, mode=4)
-play_check("data/losing_my_religion.wav", "data/losing_my_religion.csv", fast=True, mode=5)
+# play_check("data/chordtest0.wav", "data/chordtest0.csv", fast=True, mode=4)
+# play_check("data/chordtest0.wav", "data/chordtest0.csv", fast=True, mode=5)
