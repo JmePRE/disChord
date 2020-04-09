@@ -11,3 +11,4 @@ chords1sliced.*
 stuff/data/soundfiles/*
 stuff/data/labels/*
 !stuff/data/*/.gitkeep
+*.pyc
