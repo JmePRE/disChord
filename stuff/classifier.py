@@ -3,6 +3,7 @@ import numpy as np
 from dsp_preprocess import chroma_process
 from dsp_preprocess import chroma_process_split
 from model import *
+import csv
 
 from sklearn.preprocessing import MultiLabelBinarizer
 
@@ -62,3 +63,19 @@ def classify(y0, sr0, mode=5):
         pi += 1
     label_arr = mlb.inverse_transform(pr)  # returns array of text labels corresponding to prediction
     return label_arr, frame_times  # returns labels and corresponding beat timings
+
+
+def classify_to_csv(csv_file, y0, sr0, mode=5):  # exactly what it says
+    label_arr, frames = classify(y0, sr0, mode=mode)
+    with open(csv_file, 'w', newline='') as f:
+        writer = csv.writer(f)
+        for i in range(len(label_arr)):
+            row = [label_arr[i][0], label_arr[i][1], frames[i]]
+            print(row)
+            writer.writerow(row)
+    print('done')
+    return
+
+
+y, sr = librosa.load('test/Maroon_5_-_Memories.wav')
+classify_to_csv('preds.csv', y, sr)
