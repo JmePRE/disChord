@@ -8,5 +8,6 @@
 *.pyc
 .idea/*
 chords1sliced.*
-stuff/data/*
-stuff/test/*
+stuff/data/soundfiles/*
+stuff/data/labels/*
+!stuff/data/*/.gitkeep

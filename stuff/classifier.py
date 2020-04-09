@@ -2,19 +2,17 @@ import librosa
 import numpy as np
 from dsp_preprocess import chroma_process
 from dsp_preprocess import chroma_process_split
-from model import model_0
-from model import model_1
-from model import model_2
-from model import model_3
-from model import model_4
-from model import model_5
-from model import model_6
+from model import *
 
 from sklearn.preprocessing import MultiLabelBinarizer
 
-def classify(y0, sr0, mode=0):
-    print('Build model...')
-    if(mode == 0 or mode == 1):
+# Call classify on a loaded sound file to get an array of chord predictions and corresponding timestamps in song
+
+
+def classify(y0, sr0, mode=5):
+
+    #  Select model based on mode flag, make predictions for sound file
+    if mode == 0 or mode == 1:
 
         x_data, frame_times = chroma_process(y0, sr0)
         if(mode == 0):
@@ -55,12 +53,12 @@ def classify(y0, sr0, mode=0):
     pr = np.zeros(preds.shape)
     pi = 0
     for p in preds:
-        root = np.where(p == max(p[:12]))
-        mmn = np.where(p == max(p[12:]))
+        root = np.where(p == max(p[:12]))  # find index of key with highest confidence
+        mmn = np.where(p == max(p[12:]))  # same for minor/major
         p = np.zeros(p.shape)
         p[root] = 1
         p[mmn] = 1
         pr[pi] = p
         pi += 1
-    label_arr = mlb.inverse_transform(pr)
-    return label_arr, frame_times
+    label_arr = mlb.inverse_transform(pr)  # returns array of text labels corresponding to prediction
+    return label_arr, frame_times  # returns labels and corresponding beat timings

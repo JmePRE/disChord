@@ -10,57 +10,37 @@ from dsp_preprocess import label_process
 from keras.optimizers import Adam
 import os
 import pickle
-from model import model_0
-from model import model_1
-from model import model_2
-from model import model_3
-from model import model_4
-from model import model_5
-from model import model_6
-'''
-import argparse
-
-
-ap = argparse.ArgumentParser()
-ap.add_argument("-d", "--dataset", required=True,
-	help="path to input dataset (i.e., directory of images)")
-ap.add_argument("-m", "--model", required=True,
-	help="path to output model")
-
-args = vars(ap.parse_args())
-'''
-
-print('Build model...')
+from model import *
 
 
 def train(model_id, retrain=False, EPOCHS=50):
-    if(model_id==0):
+    if model_id == 0:
         model = model_0()
         model.compile(loss='binary_crossentropy',
                       optimizer='adam',
                       metrics=['accuracy'])
 
-        if (not os.path.exists('xt.npy')) or retrain:
-            xt, yt = np.zeros(12), np.zeros(15)
+        if (not os.path.exists('xt.npy')) or retrain:  # pre processed data not present
+            xt, yt = np.zeros(12), np.zeros(15)  # initialize x train and y train
             donefiles = []
             print('die')
         else:
-            donefiles = pickle.load(open('donefiles.pkl', 'rb'))
+            donefiles = pickle.load(open('donefiles.pkl', 'rb'))  # load previously preprocessed data
             xt, yt = np.load('xt.npy'), np.load('yt.npy')
             print(xt.shape)
             print(yt.shape)
 
         for (root, dir, file) in os.walk('data/labels/'):
             for f in file:
-                if (f not in donefiles) or retrain:
+                if (f not in donefiles) or retrain:  # process unprocessed data or all data if retrain flag set to true
                     x0, y0 = label_process(("data/labels/" + f), ("data/soundfiles/" + f[:-4] + ".wav"))
                     donefiles.append(f)
                     xt = np.vstack([x0, xt])
                     yt = np.vstack([y0, yt])
 
-        pickle.dump(donefiles, open('donefiles.pkl', 'wb'))
-        np.save('xt.npy', xt)
-        np.save('yt.npy', yt)
+        pickle.dump(donefiles, open('donefiles.pkl', 'wb'))  # save list of already processed files
+        np.save('xt.npy', xt)  # save x train values as numpy binary file
+        np.save('yt.npy', yt)  # same for y train
 
         # train the network
         print("[INFO] training network...")
@@ -88,7 +68,7 @@ def train(model_id, retrain=False, EPOCHS=50):
         plt.legend(loc="upper left")
         plt.show()
 
-    elif(model_id==1):
+    elif model_id == 1:
         model = model_1()
         model.compile(loss='binary_crossentropy',
                       optimizer='adam',
@@ -142,7 +122,7 @@ def train(model_id, retrain=False, EPOCHS=50):
         plt.legend(loc="upper left")
         plt.show()
 
-    elif(model_id==2):
+    elif model_id == 2:
         model = model_2()
         model.compile(loss='binary_crossentropy',
                       optimizer='adam',
@@ -196,7 +176,7 @@ def train(model_id, retrain=False, EPOCHS=50):
         plt.legend(loc="upper left")
         plt.show()
 
-    elif(model_id==3 or model_id==4):
+    elif model_id == 3 or model_id == 4:
         if model_id == 4:
             model = model_4()
         else:
@@ -224,6 +204,7 @@ def train(model_id, retrain=False, EPOCHS=50):
                     print(x0.shape)
                     xt = np.concatenate((x0, xt))
                     yt = np.vstack([y0, yt])
+
         np.set_printoptions(threshold=np.inf)
         print(xt[1:21])
         print(yt[1:21])
@@ -259,7 +240,8 @@ def train(model_id, retrain=False, EPOCHS=50):
         plt.ylabel("Loss/Accuracy")
         plt.legend(loc="upper left")
         plt.show()
-    elif (model_id == 5):
+
+    elif model_id == 5:
         model = model_5()
         model.compile(loss='binary_crossentropy',
                       optimizer='adam',
@@ -284,9 +266,8 @@ def train(model_id, retrain=False, EPOCHS=50):
                     print(x0.shape)
                     xt = np.concatenate((x0, xt))
                     yt = np.vstack([y0, yt])
+
         np.set_printoptions(threshold=np.inf)
-        print(xt[1:21])
-        print(yt[1:21])
         pickle.dump(donefiles, open('donefiles_alt.pkl', 'wb'))
         np.save('xt_alt.npy', xt)
         np.save('yt_alt.npy', yt)
@@ -317,7 +298,7 @@ def train(model_id, retrain=False, EPOCHS=50):
         plt.legend(loc="upper left")
         plt.show()
 
-    elif (model_id == 6):
+    elif model_id == 6:
         model = model_6()
         model.compile(loss='binary_crossentropy',
                       optimizer='adam',
@@ -342,9 +323,8 @@ def train(model_id, retrain=False, EPOCHS=50):
                     print(x0.shape)
                     xt = np.concatenate((x0, xt))
                     yt = np.vstack([y0, yt])
+
         np.set_printoptions(threshold=np.inf)
-        print(xt[1:21])
-        print(yt[1:21])
         pickle.dump(donefiles, open('donefiles_alt.pkl', 'wb'))
         np.save('xt_alt.npy', xt)
         np.save('yt_alt.npy', yt)
@@ -377,7 +357,4 @@ def train(model_id, retrain=False, EPOCHS=50):
     return
 
 
-# train(5)
-
 train(6, EPOCHS=100)
-# train(2)

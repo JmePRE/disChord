@@ -6,8 +6,10 @@ import librosa
 from classifier import classify
 import csv
 
+# For playing sounds synchronously with chord label printing
 
-def play_predicts(file, mode=0, fast=False):
+
+def play_predicts(file, mode=5, fast=False):  # plays predictions with live chord output
     y, sr = librosa.load(file)
     labels, beats = classify(y, sr, mode)
     cbeat = 0
@@ -32,7 +34,7 @@ def play_predicts(file, mode=0, fast=False):
     return
 
 
-def play_check(sf, cf, fast=False, mode=0):
+def play_check(sf, cf, fast=False, mode=5):  # plays & prints predicts along actual labels for verification.
     labels = []
     with open(cf, newline='') as csvfile:
         r = csv.reader(csvfile)
@@ -51,18 +53,18 @@ def play_check(sf, cf, fast=False, mode=0):
         beat_frames = np.append(beat_frames, (beat_frames[-1] + int(
             np.mean([(beat_frames[i] - beat_frames[i - 1]) for i in range(1, len(beat_frames))]))))
     beats = librosa.frames_to_time(beat_frames, sr)
-    cbeat = 0
+    cbeat = 0  # current beat
     print(len(beats0))
     st = time.time()
     if not fast:
         sd.play(y, sr)
         while (time.time() < st + beats[-1]):
-            if (time.time() > st + beats[cbeat]):
+            if (time.time() > st + beats[cbeat]):  # if we are in a new beat
                 try:
-                    print("actual: " + str(labels[cbeat]) + " / pred:" + str(labels0[cbeat]))
+                    print("actual: " + str(labels[cbeat]) + " / pred:" + str(labels0[cbeat]))  # print next label
                 except IndexError:
                     pass
-                cbeat += 1
+                cbeat += 1  # increment current beat
         sd.stop()
     else:
         for c in range(len(labels)):
@@ -71,12 +73,13 @@ def play_check(sf, cf, fast=False, mode=0):
             except IndexError:
                 pass
 
-    print(len(labels))
+    print(len(labels))  # number of labels
+    # print number of fully correct labels
     print(sum([labels[i] == labels0[i] for i in range(min([len(labels), len(labels0)]))]))
     return
 
 
-def play_csv(sf, cf):
+def play_csv(sf, cf):  # play sound file with actual csv labels (check hand labeling)
     labels = []
     sum_beats = 0
     with open(cf, newline='') as csvfile:
@@ -111,7 +114,7 @@ def play_csv(sf, cf):
     return
 
 
-play_predicts('test/perfect.wav', mode=5, fast=True)
+play_predicts('test/Maroon_5_-_Memories.wav', mode=5)
 # play_check("data/losing_my_religion.wav", "data/losing_my_religion.csv", fast=True, mode=3)
 
 # play_check('data/All_Of_Me.wav','data/All_Of_Me.csv', fast=True, mode=3)
