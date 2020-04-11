@@ -10,5 +10,6 @@
 chords1sliced.*
 stuff/data/soundfiles/*
 stuff/data/labels/*
-!stuff/data/*/.gitkeep
+!stuff/data/labels/chordtest0_0.csv
+!stuff/data/soundfiles/chordtest0_0.wav
 *.pyc

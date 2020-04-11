@@ -46,7 +46,7 @@ def train(model_id, retrain=False, EPOCHS=50):
         print("[INFO] training network...")
         H = model.fit(
             xt, yt, validation_split=0.2,
-            epochs=EPOCHS, verbose=1)
+            epochs=EPOCHS, verbose=2)
 
         # save the model to disk
         print("[INFO] serializing network...")
@@ -100,7 +100,7 @@ def train(model_id, retrain=False, EPOCHS=50):
         print("[INFO] training network...")
         H = model.fit(
             xt, yt1, validation_split=0.2,
-            epochs=EPOCHS, verbose=1)
+            epochs=EPOCHS, verbose=2)
 
         # save the model to disk
         print("[INFO] serializing network...")
@@ -154,7 +154,7 @@ def train(model_id, retrain=False, EPOCHS=50):
         print("[INFO] training network...")
         H = model.fit(
             xt, yt2, validation_split=0.2,
-            epochs=EPOCHS, verbose=1)
+            epochs=EPOCHS, verbose=2)
 
         # save the model to disk
         print("[INFO] serializing network...")
@@ -216,7 +216,7 @@ def train(model_id, retrain=False, EPOCHS=50):
         print("[INFO] training network...")
         H = model.fit(
             xt, yt, validation_split=0.2,
-            epochs=EPOCHS, verbose=1)
+            epochs=EPOCHS, verbose=2)
 
         # save the model to disk
         print("[INFO] serializing network...")
@@ -276,7 +276,7 @@ def train(model_id, retrain=False, EPOCHS=50):
         print("[INFO] training network...")
         H = model.fit(
             xt, yt1, validation_split=0.2,
-            epochs=EPOCHS, verbose=1)
+            epochs=EPOCHS, verbose=2)
 
         # save the model to disk
         print("[INFO] serializing network...")
@@ -333,7 +333,7 @@ def train(model_id, retrain=False, EPOCHS=50):
         print("[INFO] training network...")
         H = model.fit(
             xt, yt1, validation_split=0.2,
-            epochs=EPOCHS, verbose=1)
+            epochs=EPOCHS, verbose=2)
 
         # save the model to disk
         print("[INFO] serializing network...")
@@ -357,4 +357,4 @@ def train(model_id, retrain=False, EPOCHS=50):
     return
 
 
-train(6, EPOCHS=100)
+train(5, EPOCHS=10)
