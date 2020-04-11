@@ -34,7 +34,7 @@ def play_predicts(file, mode=5, fast=False):  # plays predictions with live chor
     return
 
 
-def play_check(sf, cf, fast=False, mode=5):  # plays & prints predicts along actual labels for verification.
+def play_check(sf, cf, fast=False, mode=5, bpm=None):  # plays & prints predicts along actual labels for verification.
     labels = []
     with open(cf, newline='') as csvfile:
         r = csv.reader(csvfile)
@@ -48,7 +48,7 @@ def play_check(sf, cf, fast=False, mode=5):  # plays & prints predicts along act
     labels0, beats0 = classify(y, sr, mode)
 
     HOP_LENGTH = 512
-    tempo, beat_frames = librosa.beat.beat_track(y=y, sr=sr, hop_length=HOP_LENGTH)
+    tempo, beat_frames = librosa.beat.beat_track(y=y, sr=sr, hop_length=HOP_LENGTH, bpm=bpm)
     while (beat_frames[-1] < (len(y) // HOP_LENGTH)):
         beat_frames = np.append(beat_frames, (beat_frames[-1] + int(
             np.mean([(beat_frames[i] - beat_frames[i - 1]) for i in range(1, len(beat_frames))]))))
@@ -73,9 +73,12 @@ def play_check(sf, cf, fast=False, mode=5):  # plays & prints predicts along act
             except IndexError:
                 pass
 
-    print(len(labels))  # number of labels
+    print(min([len(labels), len(labels0)]))  # number of labels
     # print number of fully correct labels
-    print(sum([labels[i] == labels0[i] for i in range(min([len(labels), len(labels0)]))]))
+    sum_correct = sum([labels[i] == labels0[i] for i in range(min([len(labels), len(labels0)]))])
+    print(sum_correct)
+    # print true accuracy
+    print(sum_correct/(min([len(labels), len(labels0)])))
     return
 
 
@@ -114,11 +117,11 @@ def play_csv(sf, cf):  # play sound file with actual csv labels (check hand labe
     return
 
 
-play_predicts('test/Maroon_5_-_Memories.wav', mode=5)
+# play_predicts('test/Maroon_5_-_Memories.wav', mode=5)
 # play_check("data/losing_my_religion.wav", "data/losing_my_religion.csv", fast=True, mode=3)
 
 # play_check('data/All_Of_Me.wav','data/All_Of_Me.csv', fast=True, mode=3)
 # play_check('data/All_Of_Me.wav','data/All_Of_Me.csv', fast=True, mode=4)
 
 # play_check("data/chordtest0.wav", "data/chordtest0.csv", fast=True, mode=4)
-# play_check("data/chordtest0.wav", "data/chordtest0.csv", fast=True, mode=5)
+# play_check("test/soy.mp3", "test/soy.csv", mode=5, bpm=(96*2))
